@@ -148,6 +148,13 @@ const data = [
     othersPurpose: 1,
   },
 ];
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+shuffleArray(data)
 
 onMounted(()  => {
 })
@@ -248,6 +255,9 @@ const translateAsDisplay = (result) => {
   }
   return pattern[key]
 }
+const scrollNext = (e) => {
+  e.target.parentNode.parentNode.parentNode.nextSibling.querySelector("select").focus()
+}
 </script>
 
 <template>
@@ -267,6 +277,7 @@ const translateAsDisplay = (result) => {
       <option value="-1">どちらかといえばいいえ</option>
       <option value="-2">いいえ</option>
     </select>
+    <div v-if="index !== data.length-1" class="d-grid gap-2 btn btn-outline-dark" @click="scrollNext">次へ</div>
     </div>
   </div>
     </div>
