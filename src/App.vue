@@ -205,15 +205,14 @@ const judge = () => {
   Object.assign(obj, {finish: true})
 }
 
-const translateAsDisplay = (result) => {
+const translateAsDisplay = (input) => {
   // 上位２位のタイプを取得
-  console.log(result)
-  const keys = Object.keys(result).slice(0, 2)
-  console.log("translateAsDisplay", result, keys)
+  const keys = Object.keys(input)[0]
+  console.log("translateAsDisplay", input, keys)
   // self同士、others同士で比べて、強く出る要素をピックアップ
   const type = {
-    self: result.selfFocus >= result.selfPurpose ? "F" : "P",
-    others: result.othersFocus >= result.othersPurpose ? "F": "P"
+    self: input.selfFocus >= input.selfPurpose ? "F" : "P",
+    others: input.othersFocus >= input.othersPurpose ? "F": "P"
   }
 
   const key = `${type.self}x${type.others}`
@@ -253,7 +252,20 @@ const translateAsDisplay = (result) => {
       ]
     },
   }
-  return pattern[key]
+
+  const result = pattern[key]
+  result["priority"] = translatePriority(keys)
+  return result
+}
+const translatePriority = (key) => {
+  const choice = {
+    "selfFocus": "自己中心",
+    "selfPurpose":"自分焦点",
+    "othersFocus":"他者焦点",
+    "othersPurpose":"他者中心"
+  }
+
+  return choice[key]
 }
 const scrollNext = (e) => {
   e.target.parentNode.parentNode.parentNode.nextSibling.querySelector("select").focus()
@@ -292,7 +304,7 @@ const scrollNext = (e) => {
         <h2 class="modal-title" id="exampleModalLabel">診断結果</h2>
       </div>
       <div class="modal-body text-left">
-      <p class="text-center h3">{{ obj.character }}</p>
+      <p class="text-center h3">{{ obj.character }}({{ obj.priority }})</p>
       <p class="text-left">{{ obj.explanation}}</p>
       <p class="text-left" v-for="(text, index) in obj.text" v-bind:key="index">{{text}}</p>
       </div>
