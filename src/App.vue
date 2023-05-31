@@ -29,7 +29,7 @@ const data = [
     text: "知識を拡げるための時間や金銭的な余裕がもっとあればいいと思う",
     selfFocus: 1,
   },
-  { index:8,text: "仕事により好奇心を刺激されるものに取り組みたい", selfFocus: 1 },
+  { index:8,text: "好奇心を刺激されるような仕事に取り組みたい", selfFocus: 1 },
   {
     index:9,
     text: "スキルアップよりも自分の仕事を安定させることが大事だ",
@@ -41,7 +41,7 @@ const data = [
     selfPurpose: -1,
   },
   { index:11,
-    text: "仕事を通じて成長している感覚が得たいと思っている", selfPurpose: 1 },
+    text: "仕事を通じて成長している感覚を得たいと思っている", selfPurpose: 1 },
   {
     index:12,
     text: "指示をされたり決められたやり方に従ってやるよりも自分でやりかたを決めて仕事を進めたい",
