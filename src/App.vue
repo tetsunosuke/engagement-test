@@ -29,7 +29,7 @@ const data = [
     text: "知識を拡げるための時間や金銭的な余裕がもっとあればいいと思う",
     selfFocus: 1,
   },
-  { index:8,text: "仕事により好奇心を刺激されていると思う", selfFocus: 1 },
+  { index:8,text: "仕事により好奇心を刺激されるものに取り組みたい", selfFocus: 1 },
   {
     index:9,
     text: "スキルアップよりも自分の仕事を安定させることが大事だ",
@@ -69,7 +69,7 @@ const data = [
   },
   {
     index:17,
-    text: "家庭や友人との時間を大切にすることは、仕事をする上で妥協するべきだと思う",
+    text: "家庭や友人との時間が仕事によって犠牲になってしまうことは仕方がないことだと思う",
     othersFocus: -1,
   },
   {
@@ -129,7 +129,7 @@ const data = [
   },
   {
     index:29,
-    text: "周囲とうまくやっていくことよりも成果を出して高い報酬を得るほうが重視したい",
+    text: "周囲とうまくやっていくことよりも成果を出して高い報酬を得るほうを重視したい",
     othersPurpose: 1,
   },
   {
@@ -158,7 +158,7 @@ shuffleArray(data)
 
 onMounted(()  => {
 })
-const selectChange = (index) => {  
+const selectChange = (e, index) => {  
     let val = document.querySelector("[name='name_" + index + "']").value-0
     if (!isNaN(val)) {
       document.querySelector("#id_" + index).style.backgroundColor = "#ccc"
@@ -174,6 +174,18 @@ const selectChange = (index) => {
     } else {
       Object.assign(obj, {judgeAble:false})
     }
+    const nextSibling = e.target.parentNode.parentNode.parentNode.nextSibling
+    if (typeof nextSibling.querySelector !== "undefined") {
+      const nextSelect = nextSibling.querySelector("select")
+      nextSelect.focus()
+      nextSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      const judgeBtn = document.querySelector("#judgeButton")
+      if(judgeBtn) {
+        judgeBtn.scrollIntoView({ behavior:"smooth", block: "center"})
+      }
+    }
+
 }
 const judge = () => {
   // すべてのチェック内容をカウントして
@@ -267,9 +279,6 @@ const translatePriority = (key) => {
 
   return choice[key]
 }
-const scrollNext = (e) => {
-  e.target.parentNode.parentNode.parentNode.nextSibling.querySelector("select").focus()
-}
 </script>
 
 <template>
@@ -281,7 +290,7 @@ const scrollNext = (e) => {
     <p class="card-title">{{ row.text }}</p>
     <select class="form-select form-select-lg mb-3 card-text" 
             aria-label=".form-select-lg example" 
-            @change="selectChange(row.index)" 
+            @change="selectChange($event, row.index)" 
             v-bind="{name: 'name_' + row.index}">
       <option selected>当てはまると思うものを選択してください</option>
       <option value="2">はい</option>
@@ -289,12 +298,11 @@ const scrollNext = (e) => {
       <option value="-1">どちらかといえばいいえ</option>
       <option value="-2">いいえ</option>
     </select>
-    <div v-if="index !== data.length-1" class="d-grid gap-2 btn btn-outline-dark" @click="scrollNext">次へ</div>
     </div>
   </div>
     </div>
 
-    <div v-if="obj.judgeAble" class="d-grid gap-2 mb-10 mt-5 btn btn-primary btn-lg" @click="judge" data-bs-toggle="modal" data-bs-target="#exampleModal">診断する</div>
+    <div v-bind:disabled="!obj.judgeAble" v-bind:class="[obj.judgeAble? '' : 'disabled']" class="d-grid gap-2 mb-10 mt-5 btn btn-primary btn-lg" @click="judge" data-bs-toggle="modal" data-bs-target="#exampleModal" id="judgeButton">診断する</div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
