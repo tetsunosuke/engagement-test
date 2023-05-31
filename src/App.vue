@@ -267,14 +267,31 @@ const translateAsDisplay = (input) => {
 
   const result = pattern[key]
   result["priority"] = translatePriority(keys)
+  result["score_mark"] = translateScores(input)
   return result
+}
+const translateScores = (input) => {
+  // {selfPurpose: 0, othersPurpose: 0, othersFocus: 0, selfFocus: -2} を記号化する
+  return convertToAlphabet(input.selfPurpose) + convertToAlphabet(input.selfFocus) + convertToAlphabet(input.othersPurpose) + convertToAlphabet(input.othersFocus)
+}
+const convertToAlphabet = (number)  => {
+  const alphabetRange = 26; // 使用するアルファベットの範囲（26文字）
+  const baseAscii = 65; // 'A'のASCIIコード
+
+  if (number >= -20 && number <= 20) {
+    const asciiValue = baseAscii + number + 20; // 対応するアルファベットのASCIIコードを計算
+    const alphabet = String.fromCharCode(asciiValue); // ASCIIコードをアルファベットに変換
+    return alphabet;
+  } else {
+    return "-"; // 範囲外の数値の場合には無効な入力として処理
+  }
 }
 const translatePriority = (key) => {
   const choice = {
-    "selfFocus": "自己中心",
-    "selfPurpose":"自分焦点",
-    "othersFocus":"他者焦点",
-    "othersPurpose":"他者中心"
+    "selfFocus": "自中",
+    "selfPurpose":"自焦",
+    "othersFocus":"他焦",
+    "othersPurpose":"他中"
   }
 
   return choice[key]
@@ -287,7 +304,7 @@ const translatePriority = (key) => {
     <div v-for="(row, index) in data" :key="index">
       <div class="card mb-3" v-bind="{id: 'id_' + row.index}">
         <div class="card-body">
-    <p class="card-title">{{ row.text }}</p>
+    <p class="card-title">{{index+1}}. {{ row.text }}</p>
     <select class="form-select form-select-lg mb-3 card-text" 
             aria-label=".form-select-lg example" 
             @change="selectChange($event, row.index)" 
@@ -301,6 +318,7 @@ const translatePriority = (key) => {
     </div>
   </div>
     </div>
+    <!-- 未回答の問題があったらそのリンクを出せたら良いが一旦やらない-->
 
     <div v-bind:disabled="!obj.judgeAble" v-bind:class="[obj.judgeAble? '' : 'disabled']" class="d-grid gap-2 mb-10 mt-5 btn btn-primary btn-lg" @click="judge" data-bs-toggle="modal" data-bs-target="#exampleModal" id="judgeButton">診断する</div>
 
@@ -309,10 +327,10 @@ const translatePriority = (key) => {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" id="exampleModalLabel">診断結果</h2>
+        <h2 class="modal-title" id="exampleModalLabel">診断結果: {{ obj.score_mark }} ({{ obj.priority }})</h2>
       </div>
       <div class="modal-body text-left">
-      <p class="text-center h3">{{ obj.character }}({{ obj.priority }})</p>
+      <p class="text-center h3">{{ obj.character }}</p>
       <p class="text-left">{{ obj.explanation}}</p>
       <p class="text-left" v-for="(text, index) in obj.text" v-bind:key="index">{{text}}</p>
       </div>
