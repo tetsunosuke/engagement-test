@@ -274,17 +274,20 @@ const translateScores = (input) => {
   // {selfPurpose: 0, othersPurpose: 0, othersFocus: 0, selfFocus: -2} を記号化する
   return convertToAlphabet(input.selfPurpose) + convertToAlphabet(input.selfFocus) + convertToAlphabet(input.othersPurpose) + convertToAlphabet(input.othersFocus)
 }
-const convertToAlphabet = (number)  => {
-  const alphabetRange = 26; // 使用するアルファベットの範囲（26文字）
-  const baseAscii = 65; // 'A'のASCIIコード
-
-  if (number >= -20 && number <= 20) {
-    const asciiValue = baseAscii + number + 20; // 対応するアルファベットのASCIIコードを計算
-    const alphabet = String.fromCharCode(asciiValue); // ASCIIコードをアルファベットに変換
-    return alphabet;
-  } else {
-    return "-"; // 範囲外の数値の場合には無効な入力として処理
+function convertToAlphabet(number) {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  
+  // 数値が-20から20の範囲内に収まるように調整
+  if (number < -20) {
+    number = -20;
+  } else if (number > 20) {
+    return "-";
   }
+  
+  // 文字列をlettersの一文字に変換
+  const letter = letters[number + 20];
+  
+  return letter;
 }
 const translatePriority = (key) => {
   const choice = {
