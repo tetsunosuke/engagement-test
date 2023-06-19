@@ -291,10 +291,10 @@ function convertToAlphabet(number) {
 }
 const translatePriority = (key) => {
   const choice = {
-    "selfFocus": "自中",
-    "selfPurpose":"自焦",
-    "othersFocus":"他焦",
-    "othersPurpose":"他中"
+    "selfFocus": "自/中",
+    "selfPurpose":"自/焦",
+    "othersFocus":"他/焦",
+    "othersPurpose":"他/中"
   }
 
   return choice[key]
@@ -336,6 +336,7 @@ const translatePriority = (key) => {
       <p class="text-center h3">{{ obj.character }}</p>
       <p class="text-left">{{ obj.explanation}}</p>
       <p class="text-left" v-for="(text, index) in obj.text" v-bind:key="index">{{text}}</p>
+      <p class="alert alert-success">診断結果はいかがだったでしょうか。どのようなタイプであったかも大事ですが、それぞれの質問にどう答えたかも重要です。あなたが気になった質問、悩んだ質問などを振り返ってみましょう。考えてみたこともなかったような質問はありましたか？</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
